@@ -3467,6 +3467,16 @@ body.home main > .why-section {
 }
 
 @media (max-width: 49.1875rem) {
+	.site-header__inner {
+		min-block-size: 70px;
+	}
+
+	.site-brand__logo,
+	.site-brand .custom-logo {
+		inline-size: auto;
+		block-size: 50px;
+	}
+
 	.hero__eyebrow,
 	.section-kicker {
 		font-size: 16px;
@@ -3557,7 +3567,17 @@ body.home main > .why-section {
 
 	.about-section__photo {
 		margin-block: 2rem;
-		border-radius: 200px 200px 0 0;
+		border-radius: 20px 20px 0 0;
+	}
+
+	.works-section__actions {
+		align-self: stretch;
+	}
+
+	.works-section__hint {
+		font-size: 18px;
+		text-align: right;
+		direction: rtl;
 	}
 
 	.services-list p,
