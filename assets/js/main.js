@@ -474,6 +474,65 @@
 		startMotionLayer();
 	} );
 
+	const serviceTriggers = Array.from( document.querySelectorAll( '[data-service-popup]' ) );
+	const serviceDialogs = Array.from( document.querySelectorAll( '[data-service-dialog]' ) );
+	let servicePopupTrigger = null;
+
+	const closeServicePopup = ( dialog ) => {
+		if ( ! dialog?.open ) {
+			return;
+		}
+
+		if ( 'function' === typeof dialog.close ) {
+			dialog.close();
+		} else {
+			dialog.removeAttribute( 'open' );
+			dialog.dispatchEvent( new Event( 'close' ) );
+		}
+	};
+
+	const openServicePopup = ( dialog, trigger ) => {
+		if ( ! dialog ) {
+			return;
+		}
+
+		servicePopupTrigger = trigger;
+		document.body.classList.add( 'service-popup-open' );
+
+		if ( 'function' === typeof dialog.showModal ) {
+			dialog.showModal();
+		} else {
+			dialog.setAttribute( 'open', '' );
+		}
+
+		dialog.querySelector( '[data-service-popup-close]' )?.focus();
+	};
+
+	serviceTriggers.forEach( ( trigger ) => {
+		trigger.addEventListener( 'click', () => {
+			const dialog = document.getElementById( `service-popup-${ trigger.dataset.servicePopup }` );
+			openServicePopup( dialog, trigger );
+		} );
+	} );
+
+	serviceDialogs.forEach( ( dialog ) => {
+		dialog.querySelectorAll( '[data-service-popup-close]' ).forEach( ( closeButton ) => {
+			closeButton.addEventListener( 'click', () => closeServicePopup( dialog ) );
+		} );
+
+		dialog.addEventListener( 'click', ( event ) => {
+			if ( event.target === dialog ) {
+				closeServicePopup( dialog );
+			}
+		} );
+
+		dialog.addEventListener( 'close', () => {
+			document.body.classList.remove( 'service-popup-open' );
+			servicePopupTrigger?.focus();
+			servicePopupTrigger = null;
+		} );
+	} );
+
 	const orphanSafeSelectors = 'main h1, main h2, main h3, main p, footer h2, footer p';
 
 	document.querySelectorAll( orphanSafeSelectors ).forEach( ( element ) => {
